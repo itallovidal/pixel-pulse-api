@@ -1,17 +1,16 @@
 import { Controller, Get } from '@nestjs/common'
-import { igdbAPI } from '../axios/axios-config'
+import { IGDBService } from '../services/igdb.service'
 
 @Controller(`game`)
 export class GameController {
-  @Get()
+  constructor(private gamesDB: IGDBService) {}
+
+  @Get('random')
   async getGame() {
     try {
-      const games = await igdbAPI.post(
-        `/games`,
-        'fields name, category, cover, first_release_date, genres, platforms;',
-      )
+      const game = await this.gamesDB.getRandomGame()
 
-      return games.data
+      return game
     } catch (e) {
       if (e instanceof Error) console.log(e)
     }
