@@ -3,6 +3,12 @@ import { Injectable } from '@nestjs/common'
 
 @Injectable()
 export class IGDBService {
+  private igdb
+
+  constructor() {
+    this.auth()
+  }
+
   private async auth() {
     const response = await fetch(
       'https://id.twitch.tv/oauth2/token?client_id=2ty2mja5wgqlcu4uqzvcfrci2r6izl&client_secret=7ckqi2eeezh4cjahqfz90p9x707vbd&grant_type=client_credentials',
@@ -12,7 +18,7 @@ export class IGDBService {
     )
     const authObject: { access_token: string } = await response.json()
 
-    return axios.create({
+    this.igdb = axios.create({
       baseURL: `https://api.igdb.com/v4`,
       headers: {
         'Content-Type': 'text/plain',
@@ -46,7 +52,6 @@ export class IGDBService {
 
   private async getIGDBGame(offset, api: AxiosInstance) {
     try {
-      console.log(offset)
       const query = `fields *; limit 1; offset ${offset};`
       const response = await api.post('games', query)
       return response.data[0]
@@ -57,15 +62,14 @@ export class IGDBService {
 
   async getRandomGame() {
     try {
-      const IGBBApi = await this.auth()
-      const { count } = await this.getCount(IGBBApi)
+      const { count } = await this.getCount(this.igdb)
 
       let offset = this.getRandomInt(1, count)
-      let game = await this.getIGDBGame(offset, IGBBApi)
+      let game = await this.getIGDBGame(offset, this.igdb)
 
       while (this.isEmptyObject(game)) {
         offset = this.getRandomInt(1, count)
-        game = await this.getIGDBGame(offset, IGBBApi)
+        game = await this.getIGDBGame(offset, this.igdb)
       }
 
       return game

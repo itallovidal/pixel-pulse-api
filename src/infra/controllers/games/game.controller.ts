@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common'
-import { IGDBService } from '../services/igdb.service'
+import { IGDBService } from '../../../app/services/igdb.service'
 
 @Controller(`game`)
 export class GameController {
