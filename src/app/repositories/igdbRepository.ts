@@ -1,8 +1,9 @@
 import axios, { AxiosInstance } from 'axios'
 import { Injectable } from '@nestjs/common'
+import { IGameDatabase } from '../../domain/repositories/IGameDatabase'
 
 @Injectable()
-export class IGDBService {
+export class IGDBRepository implements IGameDatabase {
   private igdb
 
   constructor() {

@@ -1,9 +1,9 @@
 import { Controller, Get } from '@nestjs/common'
-import { IGDBService } from '../../../app/services/igdb.service'
+import { IGameDatabase } from '../../../domain/repositories/IGameDatabase'
 
 @Controller(`game`)
 export class GameController {
-  constructor(private gamesDB: IGDBService) {}
+  constructor(private gamesDB: IGameDatabase) {}
 
   @Get('random')
   async getGame() {

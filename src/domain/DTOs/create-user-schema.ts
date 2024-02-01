@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 export const GENRES = ['FPS', 'RPG'] as const
 
-export const createUserSchema = z.object({
+export const createUserDTO = z.object({
   email: z
     .string({
       required_error: 'Prencha o email, por favor.',
@@ -33,4 +33,4 @@ export const createUserSchema = z.object({
     .min(4),
 })
 
-export interface IcreateUserSchema extends z.infer<typeof createUserSchema> {}
+export interface ICreateUserDTO extends z.infer<typeof createUserDTO> {}
