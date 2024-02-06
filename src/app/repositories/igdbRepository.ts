@@ -53,9 +53,16 @@ export class IGDBRepository implements IGameDatabase {
 
   private async getIGDBGame(offset, api: AxiosInstance) {
     try {
-      const query = `fields *; limit 1; offset ${offset};`
-      const response = await api.post('games', query)
-      return response.data[0]
+      const query = `where cover != null & summary != null ; fields name, cover, genres, summary, id, category, platforms ; limit 1; offset ${offset};`
+      const game = await api.post('games', query)
+
+      console.log(game.data[0])
+
+      // if (game.data[0].summary && game.data[0].cover) {
+      //   return game.data[0]
+      // }
+
+      return game.data[0]
     } catch (err) {
       console.error(err)
     }
@@ -67,7 +74,6 @@ export class IGDBRepository implements IGameDatabase {
 
       let offset = this.getRandomInt(1, count)
       let game = await this.getIGDBGame(offset, this.igdb)
-
       while (this.isEmptyObject(game)) {
         offset = this.getRandomInt(1, count)
         game = await this.getIGDBGame(offset, this.igdb)

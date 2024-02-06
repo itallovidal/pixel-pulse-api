@@ -1,18 +1,14 @@
 import { Controller, Get } from '@nestjs/common'
-import { IGameDatabase } from '../../../domain/repositories/IGameDatabase'
+import { RandomGameUseCase } from '../../../app/useCases/games/randomGameUseCase'
 
 @Controller(`game`)
 export class GameController {
-  constructor(private gamesDB: IGameDatabase) {}
+  constructor(private randomGameUseCase: RandomGameUseCase) {}
 
   @Get('random')
-  async getGame() {
-    try {
-      const game = await this.gamesDB.getRandomGame()
+  async handle() {
+    const game = await this.randomGameUseCase.execute()
 
-      return game
-    } catch (e) {
-      if (e instanceof Error) console.log(e)
-    }
+    return game
   }
 }
