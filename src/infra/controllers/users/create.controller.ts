@@ -10,11 +10,18 @@ import { CreateUserUseCase } from '../../../app/useCases/users/createUserUseCase
 export class CreateUserController {
   constructor(private createUserUseCase: CreateUserUseCase) {}
 
-  @Post('create')
+  @Post('signup')
   @UsePipes(new ZodValidationPipe(createUserDTO))
-  async handle(@Body() body: ICreateUserDTO) {
-    console.log(body)
-    const resultado = await this.createUserUseCase.execute()
-    return resultado
+  async handle(@Body() payload: ICreateUserDTO) {
+    console.log(payload)
+    try {
+      await this.createUserUseCase.execute(payload)
+      return {
+        status: 201,
+        message: 'Usuário criado com sucesso!',
+      }
+    } catch (e) {
+      console.log(e)
+    }
   }
 }

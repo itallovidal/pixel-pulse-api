@@ -4,6 +4,7 @@ import { LoginUserController } from './login.controller'
 import { CreateUserUseCase } from '../../../app/useCases/users/createUserUseCase'
 import { PrismaUsersRepository } from '../../../app/repositories/prismaUsersRepository'
 import { IUserRepository } from '../../../domain/repositories/IUsersRepository'
+import { LoginUserUseCase } from '../../../app/useCases/users/loginUserUseCase'
 
 @Module({
   controllers: [CreateUserController, LoginUserController],
@@ -13,6 +14,7 @@ import { IUserRepository } from '../../../domain/repositories/IUsersRepository'
       useClass: PrismaUsersRepository,
     },
     CreateUserUseCase,
+    LoginUserUseCase,
   ],
 })
 export class UsersModule {}
