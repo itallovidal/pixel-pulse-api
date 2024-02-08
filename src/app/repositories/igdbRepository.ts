@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from 'axios'
 import { Injectable } from '@nestjs/common'
 import { IGameDatabase } from '../../domain/repositories/IGameDatabase'
+import { IGame } from '../../domain/entities/IGame'
 
 @Injectable()
 export class IGDBRepository implements IGameDatabase {
@@ -53,7 +54,10 @@ export class IGDBRepository implements IGameDatabase {
 
   private async getIGDBGame(offset, api: AxiosInstance) {
     try {
-      const query = `where cover != null & summary != null ; fields name, cover, genres, summary, id, category, platforms ; limit 1; offset ${offset};`
+      const platformFilter = `platforms = (8,6,130,11,41,9,48,167,169,12)`
+      const requiredFields = `cover != null & summary != null`
+
+      const query = `where ${requiredFields} & ${platformFilter} ; fields name, first_release_date, cover.url, genres.name, summary, id, platforms.name ; limit 1; offset ${offset};`
       const game = await api.post('games', query)
 
       console.log(game.data[0])
@@ -68,7 +72,7 @@ export class IGDBRepository implements IGameDatabase {
     }
   }
 
-  async getRandomGame() {
+  async getRandomGame(): Promise<IGame> {
     try {
       const { count } = await this.getCount(this.igdb)
 
@@ -79,9 +83,10 @@ export class IGDBRepository implements IGameDatabase {
         game = await this.getIGDBGame(offset, this.igdb)
       }
 
-      return game
+      return game as IGame
     } catch (err) {
       console.error(err)
+      throw err
     }
   }
 }

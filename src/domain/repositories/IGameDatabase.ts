@@ -1,5 +1,7 @@
+import { IGame } from '../entities/IGame'
+
 export interface IGameDatabase {
-  getRandomGame()
+  getRandomGame(): Promise<IGame>
 }
 
 export const IGameDatabase = Symbol('IGameDatabase')

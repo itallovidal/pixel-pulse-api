@@ -21,24 +21,25 @@ export class LoginUserUseCase {
   ) {}
 
   async execute({ email, password }: ILoginUserDTO) {
-    console.log(email)
-    console.log(password)
-
     const user = await this.usersRepository.getUserByEmail(email)
     if (!user) {
-      throw new NotFoundException('Email não encontrado no banco de dados.')
+      throw new NotFoundException({
+        message: 'Email não encontrado no banco de dados.',
+        field: 'email',
+        status: 404,
+        error: 'Not Found',
+      })
     }
-
-    // const hashedPassword = await hash(password, 5)
-    // const user = await this.usersRepository.getUserByEmail(
-    //   email,
-    //   hashedPassword,
-    // )
 
     const result = await compare(password, user.password)
 
     if (!result) {
-      throw new ForbiddenException('Senha incorreta, tente novamente.')
+      throw new ForbiddenException({
+        message: 'Senha incorreta, tente novamente.',
+        field: 'password',
+        status: 403,
+        error: 'forbidden',
+      })
     }
 
     // TODO: corrigir essa merda aqui que tá ruim
