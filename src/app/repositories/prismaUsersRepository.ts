@@ -1,9 +1,5 @@
 import { IUsersRepository } from '../../domain/repositories/IUsersRepository'
-import {
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common'
+import { Injectable, InternalServerErrorException } from '@nestjs/common'
 import { PrismaClient } from '@prisma/client'
 import { ICreateUserDTO } from '../../domain/DTOs/create-user-schema'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
@@ -35,6 +31,10 @@ export class PrismaUsersRepository
         console.log(e)
         throw new InternalServerErrorException(e.message)
       }
+
+      throw new InternalServerErrorException(
+        'Erro interno de servidor. Usuário não criado.',
+      )
     }
   }
 

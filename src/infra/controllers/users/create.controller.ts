@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UsePipes } from '@nestjs/common'
+import { Body, Controller, Post } from '@nestjs/common'
 import {
   createUserDTO,
   ICreateUserDTO,
@@ -11,8 +11,9 @@ export class CreateUserController {
   constructor(private createUserUseCase: CreateUserUseCase) {}
 
   @Post('signup')
-  @UsePipes(new ZodValidationPipe(createUserDTO))
-  async handle(@Body() payload: ICreateUserDTO) {
+  async handle(
+    @Body(new ZodValidationPipe(createUserDTO)) payload: ICreateUserDTO,
+  ) {
     console.log(payload)
     try {
       await this.createUserUseCase.execute(payload)

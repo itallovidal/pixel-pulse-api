@@ -19,6 +19,30 @@ model User {
   favoriteGame String
   password     String
   created_at   DateTime @default(now())
+  Rating       Rating[]
 
   @@map("users")
+}
+
+model Rating {
+  id         String   @id @default(uuid())
+  user       User     @relation(fields: [userID], references: [id])
+  userID     String
+  gameID     Int
+  stars      Int
+  created_at DateTime @default(now())
+
+  @@map("rating")
+}
+
+model Commentaries {
+  id         String   @id @default(uuid())
+  gameID     Int
+  userID     String
+  likes      Int
+  dislikes   Int
+  comment    String
+  created_at DateTime @default(now())
+
+  @@map("commentaries")
 }

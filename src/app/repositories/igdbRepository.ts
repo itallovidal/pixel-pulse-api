@@ -1,11 +1,13 @@
 import axios, { AxiosInstance } from 'axios'
 import { Injectable } from '@nestjs/common'
 import { IGameDatabase } from '../../domain/repositories/IGameDatabase'
-import { IGame } from '../../domain/entities/IGame'
+import { IGame, IRatedGame } from '../../domain/entities/IGame'
+
+import * as console from 'console'
 
 @Injectable()
 export class IGDBRepository implements IGameDatabase {
-  private igdb
+  private igdb: AxiosInstance | undefined
 
   constructor() {
     this.auth()
@@ -52,15 +54,27 @@ export class IGDBRepository implements IGameDatabase {
     }
   }
 
-  private async getIGDBGame(offset, api: AxiosInstance) {
+  private async getIGDBGame(
+    offset: number,
+    api: AxiosInstance,
+    favoritesGenres: number[],
+  ) {
     try {
-      const platformFilter = `platforms = (8,6,130,11,41,9,48,167,169,12)`
-      const requiredFields = `cover != null & summary != null`
+      console.log(favoritesGenres)
 
-      const query = `where ${requiredFields} & ${platformFilter} ; fields name, first_release_date, cover.url, genres.name, summary, id, platforms.name ; limit 1; offset ${offset};`
+      const genresFilter =
+        favoritesGenres.length === 0
+          ? ''
+          : `& genres = (${favoritesGenres[0]}) | genres = (${favoritesGenres[1]}) `
+      const platformFilter = `platforms = (8,130,11,41,9,48,167,169,12)`
+      const requiredFields = `first_release_date != null & cover != null & summary != null & rating >= 70`
+      const fields = `fields name, first_release_date, cover.url, genres.name, summary, id, platforms.name`
+
+      // 104561
+      // console.log(offset)
+
+      const query = `where ${requiredFields} & ${platformFilter} ${genresFilter} ; ${fields} ; limit 1; offset ${offset};`
       const game = await api.post('games', query)
-
-      console.log(game.data[0])
 
       // if (game.data[0].summary && game.data[0].cover) {
       //   return game.data[0]
@@ -72,21 +86,42 @@ export class IGDBRepository implements IGameDatabase {
     }
   }
 
-  async getRandomGame(): Promise<IGame> {
+  async getRandomGame(favoritesGenres: number[]): Promise<IGame> {
     try {
+      if (this.igdb === undefined) {
+        throw new Error('Erro na hora de inicializar o igdb')
+      }
+
       const { count } = await this.getCount(this.igdb)
 
       let offset = this.getRandomInt(1, count)
-      let game = await this.getIGDBGame(offset, this.igdb)
+      let game = await this.getIGDBGame(offset, this.igdb, favoritesGenres)
       while (this.isEmptyObject(game)) {
         offset = this.getRandomInt(1, count)
-        game = await this.getIGDBGame(offset, this.igdb)
+        game = await this.getIGDBGame(offset, this.igdb, favoritesGenres)
       }
 
       return game as IGame
     } catch (err) {
       console.error(err)
       throw err
+    }
+  }
+
+  async getRatedGames(ids: number[]): Promise<IRatedGame[]> {
+    try {
+      if (this.igdb === undefined) {
+        throw new Error('Erro na hora de inicializar o igdb')
+      }
+
+      const fields = `fields name, cover.url, genres.name, id`
+
+      const query = `where id = (${ids.join()}) ; ${fields} ;`
+      const { data } = await this.igdb.post('games', query)
+      return data as IRatedGame[]
+    } catch (err) {
+      console.error(err)
+      throw new Error('Erro interno')
     }
   }
 }

@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common'
 import { ILoginUserDTO } from '../../../domain/DTOs/login-user-schema'
 import {
-  IUserRepository,
+  ISUserRepository,
   IUsersRepository,
 } from '../../../domain/repositories/IUsersRepository'
 import { compare } from 'bcrypt'
@@ -17,7 +17,7 @@ import * as process from 'process'
 @Injectable()
 export class LoginUserUseCase {
   constructor(
-    @Inject(IUserRepository) private usersRepository: IUsersRepository,
+    @Inject(ISUserRepository) private usersRepository: IUsersRepository,
   ) {}
 
   async execute({ email, password }: ILoginUserDTO) {

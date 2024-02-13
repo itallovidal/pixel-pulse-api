@@ -7,4 +7,4 @@ export interface IUsersRepository {
   getUserByEmail(email: string): Promise<IUser | null>
 }
 
-export const IUserRepository = Symbol('IUsersRepository')
+export const ISUserRepository = Symbol('IUsersRepository')

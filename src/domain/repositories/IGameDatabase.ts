@@ -1,7 +1,8 @@
-import { IGame } from '../entities/IGame'
+import { IGame, IRatedGame } from '../entities/IGame'
 
 export interface IGameDatabase {
-  getRandomGame(): Promise<IGame>
+  getRandomGame(favoritesGenres: number[]): Promise<IGame>
+  getRatedGames(ids: number[]): Promise<IRatedGame[]>
 }
 
 export const IGameDatabase = Symbol('IGameDatabase')
