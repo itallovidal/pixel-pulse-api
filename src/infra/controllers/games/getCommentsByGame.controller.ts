@@ -14,7 +14,9 @@ export class GetCommentsByGameController {
         )
       }
 
-      const comments = await this.getCommentsByGameUseCase.execute(gameID)
+      const comments = await this.getCommentsByGameUseCase.execute(
+        Number(gameID),
+      )
 
       return comments
     } catch (e) {

@@ -25,7 +25,7 @@ export class CreateCommentController {
   ) {
     if (!res['locals']) {
       throw new InternalServerErrorException(
-        'Erro interno de servidor. Middleware. ',
+        'Erro interno de servidor. Middleware.',
       )
     }
     try {

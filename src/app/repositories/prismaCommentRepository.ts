@@ -22,7 +22,18 @@ export class PrismaCommentRepository
       where: {
         gameID,
       },
+      include: {
+        user: {
+          select: {
+            name: true,
+            favGenre1: true,
+            favGenre2: true,
+          },
+        },
+      },
     })
+
+    console.log(comments)
 
     return comments
   }

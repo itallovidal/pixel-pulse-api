@@ -20,6 +20,8 @@ import { CreateCommentController } from './createComment.controller'
 import { CreateCommentUseCase } from '../../../app/useCases/games/createCommentUseCase'
 import { ISCommentRepository } from '../../../domain/repositories/ICommentRepository'
 import { PrismaCommentRepository } from '../../../app/repositories/prismaCommentRepository'
+import { GetCommentsByGameController } from './getCommentsByGame.controller'
+import { GetCommentsByGameUseCase } from '../../../app/useCases/games/getCommentsByGameUseCase'
 
 @Module({
   controllers: [
@@ -27,6 +29,7 @@ import { PrismaCommentRepository } from '../../../app/repositories/prismaComment
     CreateCommentController,
     RateGameController,
     RatedGamesController,
+    GetCommentsByGameController,
   ],
   providers: [
     {
@@ -45,6 +48,7 @@ import { PrismaCommentRepository } from '../../../app/repositories/prismaComment
     RateGameUseCase,
     RatedGamesUseCase,
     CreateCommentUseCase,
+    GetCommentsByGameUseCase,
   ],
 })
 export class GamesModule implements NestModule {
