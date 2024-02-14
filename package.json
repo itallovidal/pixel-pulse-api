@@ -2,6 +2,9 @@
   "name": "nestpixel-pulse-api",
   "version": "0.0.1",
   "description": "",
+  "engines": {
+    "node": ">=18"
+  },
   "[prisma]": {
     "editor.formatOnSave": true
   },
