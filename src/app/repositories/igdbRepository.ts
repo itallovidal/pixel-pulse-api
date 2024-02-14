@@ -124,4 +124,16 @@ export class IGDBRepository implements IGameDatabase {
       throw new Error('Erro interno')
     }
   }
+
+  async getGameByID(gameID: number) {
+    if (!this.igdb) {
+      throw new Error('a')
+    }
+
+    const fields = `fields name, first_release_date, cover.url, genres.name, summary, id, platforms.name`
+    const query = `where id = (${gameID}) ; ${fields} ; limit 1;`
+    const game = await this.igdb.post('games', query)
+
+    return game.data[0] as IGame
+  }
 }
