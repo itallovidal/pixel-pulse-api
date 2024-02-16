@@ -24,6 +24,20 @@ export class PrismaRatingRepository
       where: {
         userID,
       },
+      orderBy: {
+        stars: 'desc',
+      },
+    })
+  }
+
+  async updateRating(id: string, stars: number) {
+    await this.prisma.rating.update({
+      where: {
+        id,
+      },
+      data: {
+        stars,
+      },
     })
   }
 

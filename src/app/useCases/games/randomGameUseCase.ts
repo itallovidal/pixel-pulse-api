@@ -9,7 +9,6 @@ export class RandomGameUseCase {
 
   async execute(favoritesGenres: number[]) {
     const game = await this.gamesDB.getRandomGame(favoritesGenres)
-    console.log(game)
     game.cover.url = game.cover.url.replace('t_thumb', 't_720p')
 
     const date = fromUnixTime(game.first_release_date)

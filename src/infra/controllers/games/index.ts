@@ -24,6 +24,8 @@ import { GetCommentsByGameController } from './getCommentsByGame.controller'
 import { GetCommentsByGameUseCase } from '../../../app/useCases/games/getCommentsByGameUseCase'
 import { GetGameByIDController } from './getGameByID.controller'
 import { GetGameByIDUseCase } from '../../../app/useCases/games/getGameByIDUseCase'
+import { UpdateRatingController } from './updateRating.controller'
+import { UpdateRatingUseCase } from '../../../app/useCases/games/updateRatingUseCase'
 
 @Module({
   controllers: [
@@ -33,6 +35,7 @@ import { GetGameByIDUseCase } from '../../../app/useCases/games/getGameByIDUseCa
     RatedGamesController,
     GetCommentsByGameController,
     GetGameByIDController,
+    UpdateRatingController,
   ],
   providers: [
     {
@@ -53,6 +56,7 @@ import { GetGameByIDUseCase } from '../../../app/useCases/games/getGameByIDUseCa
     CreateCommentUseCase,
     GetCommentsByGameUseCase,
     GetGameByIDUseCase,
+    UpdateRatingUseCase,
   ],
 })
 export class GamesModule implements NestModule {

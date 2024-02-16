@@ -67,7 +67,7 @@ export class IGDBRepository implements IGameDatabase {
           ? ''
           : `& genres = (${favoritesGenres[0]}) | genres = (${favoritesGenres[1]}) `
       const platformFilter = `platforms = (8,130,11,41,9,48,167,169,12)`
-      const requiredFields = `first_release_date != null & cover != null & summary != null & rating >= 70`
+      const requiredFields = `genres.name != null & first_release_date != null & cover != null & summary != null & rating >= 70`
       const fields = `fields name, first_release_date, cover.url, genres.name, summary, id, platforms.name`
 
       // 104561

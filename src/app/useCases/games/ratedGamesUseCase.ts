@@ -25,29 +25,29 @@ export class RatedGamesUseCase {
         game.cover.url = game.cover.url.replace('t_thumb', 't_cover_big')
       })
 
-      // Criar um objeto de mapeamento para os IDs
-      const gameMap = {}
+      const ratedGames = ratedRegistry.map((registry) => {
+        const found = games.find((game) => game.id === registry.gameID)
+        if (found) {
+          return {
+            ...found,
+            ...registry,
+          }
+        }
 
-      // Preencher o mapeamento com os objetos do primeiro vetor
-      games.forEach((game) => {
-        gameMap[game.id] = { ...game }
-      })
-
-      console.log(gameMap)
-
-      // Atualizar o mapeamento com as propriedades do segundo vetor
-      ratedRegistry.forEach((registry) => {
-        if (gameMap[registry.gameID]) {
-          gameMap[registry.gameID].stars = registry.stars
+        return {
+          cover: {
+            id: '',
+            url: '',
+          },
+          name: '',
+          ...registry,
         }
       })
-
-      // Converter o objeto de mapeamento de volta para um array
-      const ratedGames = Object.values(gameMap)
 
       return ratedGames
     } catch (e) {
       console.log(e)
+      throw new Error('a')
     }
   }
 }
