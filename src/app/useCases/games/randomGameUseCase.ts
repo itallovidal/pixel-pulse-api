@@ -1,21 +1,26 @@
 import { Inject, Injectable } from '@nestjs/common'
 import { IGameDatabase } from '../../../domain/repositories/IGameDatabase'
-import { fromUnixTime, format } from 'date-fns'
-import { ptBR } from 'date-fns/locale'
+
+import { IUser } from '../../../domain/entities/IUser'
+
+import { BuildGameDataUseCase } from '../buildGameDataUseCase'
 
 @Injectable()
 export class RandomGameUseCase {
-  constructor(@Inject(IGameDatabase) private gamesDB: IGameDatabase) {}
+  constructor(
+    @Inject(IGameDatabase) private gamesDB: IGameDatabase,
+    @Inject(BuildGameDataUseCase)
+    private buildGameDataUseCase: BuildGameDataUseCase,
+  ) {}
 
-  async execute(favoritesGenres: number[]) {
-    const game = await this.gamesDB.getRandomGame(favoritesGenres)
-    game.cover.url = game.cover.url.replace('t_thumb', 't_720p')
+  async execute(user: IUser, filter: 'discover' | 'forme') {
+    // checking the filter to fetch
+    const favoriteGenres =
+      filter === `forme` ? [user.favGenre1, user.favGenre2] : []
 
-    const date = fromUnixTime(game.first_release_date)
-    const formattedDate = format(date, 'dd/MM/yyyy', {
-      locale: ptBR,
-    })
-    game.releaseDate = formattedDate
-    return game
+    // getting the game and replacing the cover for better image quality
+    const unformattedGame = await this.gamesDB.getRandomGame(favoriteGenres)
+
+    return await this.buildGameDataUseCase.execute(unformattedGame, user.id)
   }
 }

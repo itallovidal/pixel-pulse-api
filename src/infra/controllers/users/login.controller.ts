@@ -36,6 +36,7 @@ export class LoginUserController {
       if (e instanceof ForbiddenException) {
         throw e
       }
+
       console.log(e)
       throw new InternalServerErrorException('Erro interno de servidor.')
     }

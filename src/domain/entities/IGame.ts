@@ -1,8 +1,3 @@
-interface Platform {
-  id: number
-  name: string
-}
-
 export interface IGame {
   id: number
   cover: {
@@ -10,19 +5,13 @@ export interface IGame {
     url: string
   }
   name: string
-  platforms: Platform[]
+  platforms: {
+    id: number
+    name: string
+  }[]
   summary: string
   first_release_date: number
   releaseDate: string
-}
-
-export interface IRatedGames {
-  id: number
-  cover: {
-    id: number
-    url: string
-  }
-  name: string
 }
 
 export interface IRating {

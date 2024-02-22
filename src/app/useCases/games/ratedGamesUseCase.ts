@@ -19,7 +19,7 @@ export class RatedGamesUseCase {
         return rate.gameID
       })
 
-      const games = await this.gamesDB.getRatedGames(ids)
+      const games = await this.gamesDB.getMultipleGamesById(ids)
 
       games.forEach((game) => {
         game.cover.url = game.cover.url.replace('t_thumb', 't_cover_big')
@@ -36,10 +36,10 @@ export class RatedGamesUseCase {
 
         return {
           cover: {
-            id: '',
-            url: '',
+            id: 'erro',
+            url: 'erro',
           },
-          name: '',
+          name: 'erro',
           ...registry,
         }
       })

@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Get,
-  InternalServerErrorException,
-  Param,
-  Query,
-  Response,
-} from '@nestjs/common'
+import { Controller, Get, Param, Response } from '@nestjs/common'
 import { RandomGameUseCase } from '../../../app/useCases/games/randomGameUseCase'
 import { IUser } from '../../../domain/entities/IUser'
 
@@ -18,19 +11,12 @@ export class RandomController {
     @Response({ passthrough: true }) res: Response,
     @Param(`filter`) filter: `discover` | `forme`,
   ) {
-    if (!res['locals']) {
-      throw new InternalServerErrorException(
-        'Erro interno de servidor. Middleware. ',
-      )
-    }
-
     try {
       const user = res['locals'].user as IUser
-      const favoriteGenres =
-        filter === `forme` ? [user.favGenre1, user.favGenre2] : []
-      return await this.randomGameUseCase.execute(favoriteGenres)
+
+      return await this.randomGameUseCase.execute(user, filter)
     } catch (e) {
-      console.log(e)
+      throw e
     }
   }
 }

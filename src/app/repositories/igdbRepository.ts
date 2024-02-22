@@ -1,16 +1,22 @@
 import axios, { AxiosInstance } from 'axios'
-import { Injectable } from '@nestjs/common'
+import { Injectable, InternalServerErrorException } from '@nestjs/common'
 import { IGameDatabase } from '../../domain/repositories/IGameDatabase'
 import { IGame, IRatedGame } from '../../domain/entities/IGame'
-
-import * as console from 'console'
+import { getRandomInt } from '../../utilities/getRandomInt'
+import { isEmptyObject } from '../../utilities/isEmptyObject'
 
 @Injectable()
 export class IGDBRepository implements IGameDatabase {
-  private igdb: AxiosInstance | undefined
+  private IGDB!: AxiosInstance
 
   constructor() {
     this.auth()
+      .then((axios) => {
+        this.IGDB = axios
+      })
+      .catch((e) => {
+        throw e
+      })
   }
 
   private async auth() {
@@ -20,10 +26,17 @@ export class IGDBRepository implements IGameDatabase {
         method: 'POST',
       },
     )
+
+    if (response.status !== 200) {
+      throw new InternalServerErrorException(
+        'Erro ao inicializar a autenticação do IGDB.',
+      )
+    }
+
     const authObject: { access_token: string } = await response.json()
 
-    this.igdb = axios.create({
-      baseURL: `https://api.igdb.com/v4`,
+    return axios.create({
+      baseURL: `https://api.IGDB.com/v4`,
       headers: {
         'Content-Type': 'text/plain',
         Authorization: `Bearer ${authObject.access_token}`,
@@ -32,108 +45,74 @@ export class IGDBRepository implements IGameDatabase {
     })
   }
 
-  // pega um número aleatório
-  private getRandomInt(min: number, max: number) {
-    min = Math.ceil(min)
-    max = Math.floor(max)
-    return Math.floor(Math.random() * (max - min + 1) + min)
-  }
-
-  // verifica se o objeto é vazio
-  private isEmptyObject(obj) {
-    return !Object.keys(obj).length
-  }
-
-  private async getCount(api: AxiosInstance) {
-    try {
-      const response = await api.post('/games/count', 'where rating > 80;')
-
-      return response.data
-    } catch (err) {
-      console.error(err)
+  private async getCount() {
+    const response = await this.IGDB.post('/games/count', 'where rating > 80;')
+    if (response.status !== 200) {
+      throw new Error('Erro ao pegar o count no IGDB.')
     }
+
+    const { count } = response.data
+
+    return count
   }
 
-  private async getIGDBGame(
-    offset: number,
-    api: AxiosInstance,
-    favoritesGenres: number[],
-  ) {
-    try {
-      console.log(favoritesGenres)
+  private async getIGDBGame(query: string) {
+    const response = await this.IGDB.post('games', query)
 
-      const genresFilter =
-        favoritesGenres.length === 0
-          ? ''
-          : `& genres = (${favoritesGenres[0]}) | genres = (${favoritesGenres[1]}) `
-      const platformFilter = `platforms = (8,130,11,41,9,48,167,169,12)`
-      const requiredFields = `genres.name != null & first_release_date != null & cover != null & summary != null & rating >= 70`
-      const fields = `fields name, first_release_date, cover.url, genres.name, summary, id, platforms.name`
-
-      // 104561
-      // console.log(offset)
-
-      const query = `where ${requiredFields} & ${platformFilter} ${genresFilter} ; ${fields} ; limit 1; offset ${offset};`
-      const game = await api.post('games', query)
-
-      // if (game.data[0].summary && game.data[0].cover) {
-      //   return game.data[0]
-      // }
-
-      return game.data[0]
-    } catch (err) {
-      console.error(err)
+    if (response.status !== 200) {
+      throw new Error('Erro na query do jogo aleatório.')
     }
+
+    return response.data[0]
   }
 
   async getRandomGame(favoritesGenres: number[]): Promise<IGame> {
-    try {
-      if (this.igdb === undefined) {
-        throw new Error('Erro na hora de inicializar o igdb')
-      }
+    const count = await this.getCount()
+    console.log(count)
+    let offset = getRandomInt(1, count)
 
-      const { count } = await this.getCount(this.igdb)
+    const genresFilter =
+      favoritesGenres.length === 0
+        ? ''
+        : `& genres = (${favoritesGenres[0]}) | genres = (${favoritesGenres[1]}) `
 
-      let offset = this.getRandomInt(1, count)
-      let game = await this.getIGDBGame(offset, this.igdb, favoritesGenres)
-      while (this.isEmptyObject(game)) {
-        offset = this.getRandomInt(1, count)
-        game = await this.getIGDBGame(offset, this.igdb, favoritesGenres)
-      }
+    const platformFilter = `platforms = (8,130,11,41,9,48,167,169,12)`
+    const requiredFields = `genres.name != null & first_release_date != null & cover != null & summary != null & rating >= 70`
+    const fields = `fields name, first_release_date, cover.url, genres.name, summary, id, platforms.name`
 
-      return game as IGame
-    } catch (err) {
-      console.error(err)
-      throw err
+    const query = `where ${requiredFields} & ${platformFilter} ${genresFilter} ; ${fields} ; limit 1; offset ${offset};`
+
+    let game = await this.getIGDBGame(query)
+    while (isEmptyObject(game)) {
+      offset = getRandomInt(1, count)
+      game = await this.getIGDBGame(query)
     }
+
+    return game as IGame
   }
 
-  async getRatedGames(ids: number[]): Promise<IRatedGame[]> {
-    try {
-      if (this.igdb === undefined) {
-        throw new Error('Erro na hora de inicializar o igdb')
-      }
+  async getMultipleGamesById(ids: number[]): Promise<IRatedGame[]> {
+    const fields = `fields name, cover.url, genres.name, id`
+    const query = `where id = (${ids.join()}) ; ${fields} ;`
 
-      const fields = `fields name, cover.url, genres.name, id`
+    const response = await this.IGDB.post('games', query)
 
-      const query = `where id = (${ids.join()}) ; ${fields} ;`
-      const { data } = await this.igdb.post('games', query)
-      return data as IRatedGame[]
-    } catch (err) {
-      console.error(err)
-      throw new Error('Erro interno')
+    if (response.status !== 200) {
+      throw new Error('Erro ao pegar os jogos avaliados pelo usuário no IGDB.')
     }
+
+    return response.data as IRatedGame[]
   }
 
   async getGameByID(gameID: number) {
-    if (!this.igdb) {
-      throw new Error('a')
-    }
-
     const fields = `fields name, first_release_date, cover.url, genres.name, summary, id, platforms.name`
     const query = `where id = (${gameID}) ; ${fields} ; limit 1;`
-    const game = await this.igdb.post('games', query)
+    const response = await this.IGDB.post('games', query)
 
-    return game.data[0] as IGame
+    if (response.status !== 200) {
+      throw new Error('Erro ao pegar o jogo pelo ID no IGDB.')
+    }
+
+    return response.data[0] as IGame
   }
 }

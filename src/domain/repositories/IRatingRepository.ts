@@ -5,6 +5,10 @@ import { IRating } from '../entities/IGame'
 export interface IRatingRepository {
   rateGame(rate: IRatingGameDTO): Promise<IRate>
   getRatedGames(userID: string): Promise<IRating[]>
+  getRatedGameByUserIDAndGameID(
+    userID: string,
+    gameID: number,
+  ): Promise<IRating | null>
   updateRating(id: string, stars: number): Promise<void>
 }
 

@@ -1,31 +1,27 @@
 import {
   Controller,
   Get,
+  Inject,
   InternalServerErrorException,
   Response,
 } from '@nestjs/common'
 import { IUser } from '../../../domain/entities/IUser'
-import { RatedGamesUseCase } from '../../../app/useCases/games/ratedGamesUseCase'
+import { WishedGamesUseCase } from '../../../app/useCases/games/wishedGamesUseCase'
+import {
+  ISWishPlayRepository,
+  IWishPlayRepository,
+} from '../../../domain/repositories/IWishPlay'
 
 @Controller('games')
-export class RatedGamesController {
-  constructor(private ratedGamesUseCase: RatedGamesUseCase) {}
+export class GetWishedGamesController {
+  constructor(private wishedGamesUseCase: WishedGamesUseCase) {}
 
-  @Get('rated')
+  @Get('wishPlay')
   async handle(@Response({ passthrough: true }) res: Response) {
-    if (!res['locals']) {
-      throw new InternalServerErrorException(
-        'Erro interno de servidor. Middleware. ',
-      )
-    }
-
     try {
       const user = res['locals'].user as IUser
-
-      return await this.ratedGamesUseCase.execute(user.id)
+      return await this.wishedGamesUseCase.execute(user.id)
     } catch (e) {
-      console.log(e)
-
       throw new InternalServerErrorException(
         'Erro interno, tente novamente mais tarde.',
       )

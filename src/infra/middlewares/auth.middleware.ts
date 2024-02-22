@@ -25,11 +25,15 @@ export class AuthUser implements NestMiddleware {
     }
 
     const token = auth.split('Bearer ')[1]
+    console.log('Token Extraído.')
 
     try {
       verify(token, process.env.ACCESS_TOKEN_SECRET)
+      console.log('Token válido.')
+
       const user = decode(token)
       res.locals.user = user
+      console.log('Usuário fornecido.')
       next()
     } catch (e) {
       console.log(e)

@@ -46,15 +46,20 @@ export class PrismaRatingRepository
     userID,
     stars,
   }: IRatingGameDTO & { userID: string }): Promise<IRate> {
-    console.log(gameID)
-    console.log(userID)
-    console.log(stars)
-
     return this.prisma.rating.create({
       data: {
         gameID,
         userID,
         stars,
+      },
+    })
+  }
+
+  async getRatedGameByUserIDAndGameID(userID: string, gameID: number) {
+    return this.prisma.rating.findFirst({
+      where: {
+        gameID,
+        userID,
       },
     })
   }

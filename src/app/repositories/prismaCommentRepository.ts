@@ -32,19 +32,12 @@ export class PrismaCommentRepository
         },
       },
     })
-
-    console.log(comments)
-
     return comments
   }
 
   async createComment(comment: ICreateCommentDTO): Promise<void> {
-    try {
-      await this.prisma.commentaries.create({
-        data: comment,
-      })
-    } catch (e) {
-      throw new InternalServerErrorException('Erro interno.')
-    }
+    await this.prisma.commentaries.create({
+      data: comment,
+    })
   }
 }

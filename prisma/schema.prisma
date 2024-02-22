@@ -21,6 +21,7 @@ model User {
   created_at   DateTime       @default(now())
   Rating       Rating[]
   Commentaries Commentaries[]
+  Wish         WishPlay[]
 
   @@map("users")
 }
@@ -47,4 +48,14 @@ model Commentaries {
   created_at DateTime @default(now())
 
   @@map("commentaries")
+}
+
+model WishPlay {
+  id         String   @id @default(uuid())
+  gameID     Int
+  user       User     @relation(fields: [userID], references: [id])
+  userID     String
+  created_at DateTime @default(now())
+
+  @@map("wishplay")
 }
