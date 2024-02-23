@@ -87,7 +87,7 @@ export class GamesModule implements NestModule {
         method: RequestMethod.POST,
       },
       {
-        path: 'games/rated',
+        path: 'games/rated/:page',
         method: RequestMethod.GET,
       },
       {

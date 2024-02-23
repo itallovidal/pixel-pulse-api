@@ -19,11 +19,13 @@ export class PrismaRatingRepository
     this.prisma = new PrismaClient()
   }
 
-  async getRatedGames(userID: string) {
+  async getRatedGames(userID: string, page: number) {
     return this.prisma.rating.findMany({
       where: {
         userID,
       },
+      skip: page,
+      take: 10,
       orderBy: {
         stars: 'desc',
       },
