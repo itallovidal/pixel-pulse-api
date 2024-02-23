@@ -23,6 +23,8 @@ export class AddToWishPlayController {
   ) {
     try {
       const user = res['locals'].user as IUser
+
+
       const registry = await this.addToWishPlayUseCase.execute(gameID, user.id)
 
       return {

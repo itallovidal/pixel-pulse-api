@@ -21,6 +21,8 @@ export class AddToWishPlayUseCase {
 
     await this.wishPlayRepository.addToWishPlay(wishPlayGame)
 
+    console.log('jogo adicionado!')
+
     return wishPlayGame
   }
 }

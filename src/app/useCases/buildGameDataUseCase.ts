@@ -20,6 +20,7 @@ export class BuildGameDataUseCase {
   ) {}
 
   async execute(game: IGame, userID: string) {
+    // TODO: split the code
     game.cover.url = game.cover.url.replace('t_thumb', 't_720p')
 
     // formatting date for front-end/mobile

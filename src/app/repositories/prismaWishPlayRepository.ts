@@ -18,8 +18,10 @@ export class PrismaWishPlayRepository
     this.prisma = new PrismaClient()
   }
 
-  async addToWishPlay(data: IAddToWishPlayDTO): Promise<void> {
-    await this.prisma.wishPlay.create({ data })
+  async addToWishPlay(wish: IAddToWishPlayDTO): Promise<void> {
+    await this.prisma.wishPlay.create({
+      data: wish,
+    })
   }
 
   async getAllWishes(userID: string) {
