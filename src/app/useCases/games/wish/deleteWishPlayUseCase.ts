@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import {
   ISWishPlayRepository,
   IWishPlayRepository,
-} from '../../../domain/repositories/IWishPlay'
+} from '../../../../domain/repositories/IWishPlay'
 
 @Injectable()
 export class DeleteWishPlayUseCase {

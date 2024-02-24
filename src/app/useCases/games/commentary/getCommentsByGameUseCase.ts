@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import {
   ICommentRepository,
   ISCommentRepository,
-} from '../../../domain/repositories/ICommentRepository'
+} from '../../../../domain/repositories/ICommentRepository'
 
 @Injectable()
 export class GetCommentsByGameUseCase {

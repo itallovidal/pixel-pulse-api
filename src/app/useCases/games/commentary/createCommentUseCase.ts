@@ -2,9 +2,9 @@ import { Inject, Injectable } from '@nestjs/common'
 import {
   ICommentRepository,
   ISCommentRepository,
-} from '../../../domain/repositories/ICommentRepository'
+} from '../../../../domain/repositories/ICommentRepository'
 import { randomUUID } from 'crypto'
-import { ICommentFromUserDTO } from '../../../domain/DTOs/game/createCommentDTO'
+import { ICommentFromUserDTO } from '../../../../domain/DTOs/game/createCommentDTO'
 
 @Injectable()
 export class CreateCommentUseCase {

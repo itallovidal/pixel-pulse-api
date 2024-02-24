@@ -5,11 +5,11 @@ import {
   Post,
   Response,
 } from '@nestjs/common'
-import { ZodValidationPipe } from '../../pipes/zod-validation-pipe'
+import { ZodValidationPipe } from '../../../pipes/zod-validation-pipe'
 
-import { IUser } from '../../../domain/entities/IUser'
-import { gameIDDTO, IGameIDDTO } from '../../../domain/DTOs/gameIDDTO'
-import { AddToWishPlayUseCase } from '../../../app/useCases/games/addToWishPlayUseCase'
+import { IUser } from '../../../../domain/entities/IUser'
+import { gameIDDTO, IGameIDDTO } from '../../../../domain/DTOs/gameIDDTO'
+import { AddToWishPlayUseCase } from '../../../../app/useCases/games/wish/addToWishPlayUseCase'
 
 @Controller('games')
 export class AddToWishPlayController {

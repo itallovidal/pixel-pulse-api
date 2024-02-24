@@ -1,28 +1,29 @@
+import { IGameDatabase } from '../../../../domain/repositories/IGameDatabase'
 import { Inject, Injectable } from '@nestjs/common'
 import {
-  IRatingRepository,
-  ISRatingRepository,
-} from '../../../domain/repositories/IRatingRepository'
-import { IGameDatabase } from '../../../domain/repositories/IGameDatabase'
+  ISWishPlayRepository,
+  IWishPlayRepository,
+} from '../../../../domain/repositories/IWishPlay'
 
 @Injectable()
-export class RatedGamesUseCase {
+export class WishedGamesUseCase {
   constructor(
-    @Inject(ISRatingRepository) private ratingRepository: IRatingRepository,
+    @Inject(ISWishPlayRepository)
+    private wishPlayRepository: IWishPlayRepository,
     @Inject(IGameDatabase) private gamesDB: IGameDatabase,
   ) {}
 
   async execute(userID: string, page: number) {
-    const ratedRegistry = await this.ratingRepository.getRatedGames(
+    const wishedRegistry = await this.wishPlayRepository.getAllWishes(
       userID,
       page,
     )
 
-    if (ratedRegistry.length === 0) {
+    if (wishedRegistry.length === 0) {
       return []
     }
 
-    const ids = ratedRegistry.map((rate) => {
+    const ids = wishedRegistry.map((rate) => {
       return rate.gameID
     })
 
@@ -32,7 +33,7 @@ export class RatedGamesUseCase {
       game.cover.url = game.cover.url.replace('t_thumb', 't_cover_big')
     })
 
-    const ratedGames = ratedRegistry.map((registry) => {
+    return wishedRegistry.map((registry) => {
       const found = games.find((game) => game.id === registry.gameID)
       if (found) {
         return {
@@ -50,7 +51,5 @@ export class RatedGamesUseCase {
         ...registry,
       }
     })
-
-    return ratedGames
   }
 }

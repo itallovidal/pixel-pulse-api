@@ -5,13 +5,13 @@ import {
   Post,
   Response,
 } from '@nestjs/common'
-import { ZodValidationPipe } from '../../pipes/zod-validation-pipe'
-import { CreateCommentUseCase } from '../../../app/useCases/games/createCommentUseCase'
+import { ZodValidationPipe } from '../../../pipes/zod-validation-pipe'
+import { CreateCommentUseCase } from '../../../../app/useCases/games/commentary/createCommentUseCase'
 import {
   commentFromUserDTO,
   ICommentFromUserDTO,
-} from '../../../domain/DTOs/game/createCommentDTO'
-import { IUser } from '../../../domain/entities/IUser'
+} from '../../../../domain/DTOs/game/createCommentDTO'
+import { IUser } from '../../../../domain/entities/IUser'
 
 @Controller('games')
 export class CreateCommentController {

@@ -1,7 +1,7 @@
 import { Controller, Delete, Param, Response } from '@nestjs/common'
-import { ZodValidationPipe } from '../../pipes/zod-validation-pipe'
-import { DeleteWishPlayUseCase } from '../../../app/useCases/games/deleteWishPlayUseCase'
-import { idDTO, IIdDTO } from '../../../domain/DTOs/idDTO'
+import { ZodValidationPipe } from '../../../pipes/zod-validation-pipe'
+import { DeleteWishPlayUseCase } from '../../../../app/useCases/games/wish/deleteWishPlayUseCase'
+import { idDTO, IIdDTO } from '../../../../domain/DTOs/idDTO'
 
 @Controller('games')
 export class DeleteWishPlayController {

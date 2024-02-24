@@ -5,13 +5,13 @@ import {
   Param,
   Response,
 } from '@nestjs/common'
-import { IUser } from '../../../domain/entities/IUser'
-import { RatedGamesUseCase } from '../../../app/useCases/games/ratedGamesUseCase'
-import { ZodValidationPipe } from '../../pipes/zod-validation-pipe'
+import { IUser } from '../../../../domain/entities/IUser'
+import { RatedGamesUseCase } from '../../../../app/useCases/games/rating/ratedGamesUseCase'
+import { ZodValidationPipe } from '../../../pipes/zod-validation-pipe'
 import {
   IPageValidationDTO,
   pageValidationDTO,
-} from '../../../domain/DTOs/pageValidationDTO'
+} from '../../../../domain/DTOs/pageValidationDTO'
 
 @Controller('games')
 export class RatedGamesController {

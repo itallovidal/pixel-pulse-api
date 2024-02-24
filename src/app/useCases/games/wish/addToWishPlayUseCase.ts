@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto'
 import {
   ISWishPlayRepository,
   IWishPlayRepository,
-} from '../../../domain/repositories/IWishPlay'
+} from '../../../../domain/repositories/IWishPlay'
 
 @Injectable()
 export class AddToWishPlayUseCase {

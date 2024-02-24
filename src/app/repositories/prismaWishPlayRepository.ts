@@ -24,11 +24,13 @@ export class PrismaWishPlayRepository
     })
   }
 
-  async getAllWishes(userID: string) {
+  async getAllWishes(userID: string, page: number) {
     return this.prisma.wishPlay.findMany({
       where: {
         userID,
       },
+      skip: page,
+      take: 10,
     })
   }
 

@@ -10,31 +10,33 @@ import { IGameDatabase } from '../../../domain/repositories/IGameDatabase'
 import { IGDBRepository } from '../../../app/repositories/igdbRepository'
 import { RandomGameUseCase } from '../../../app/useCases/games/randomGameUseCase'
 import { AuthUser } from '../../middlewares/auth.middleware'
-import { RateGameController } from './rateGame.controller'
-import { RateGameUseCase } from '../../../app/useCases/games/rateGameUseCase'
+import { RateGameController } from './rating/rateGame.controller'
+import { RateGameUseCase } from '../../../app/useCases/games/rating/rateGameUseCase'
 import { ISRatingRepository } from '../../../domain/repositories/IRatingRepository'
 import { PrismaRatingRepository } from '../../../app/repositories/prismaRatingRepository'
-import { RatedGamesUseCase } from '../../../app/useCases/games/ratedGamesUseCase'
-import { RatedGamesController } from './ratedGames.controller'
-import { CreateCommentController } from './createComment.controller'
-import { CreateCommentUseCase } from '../../../app/useCases/games/createCommentUseCase'
+import { RatedGamesUseCase } from '../../../app/useCases/games/rating/ratedGamesUseCase'
+import { RatedGamesController } from './rating/ratedGames.controller'
+import { CreateCommentController } from './commentary/createComment.controller'
+import { CreateCommentUseCase } from '../../../app/useCases/games/commentary/createCommentUseCase'
 import { ISCommentRepository } from '../../../domain/repositories/ICommentRepository'
 import { PrismaCommentRepository } from '../../../app/repositories/prismaCommentRepository'
-import { GetCommentsByGameController } from './getCommentsByGame.controller'
-import { GetCommentsByGameUseCase } from '../../../app/useCases/games/getCommentsByGameUseCase'
+import { GetCommentsByGameController } from './commentary/getCommentsByGame.controller'
+import { GetCommentsByGameUseCase } from '../../../app/useCases/games/commentary/getCommentsByGameUseCase'
 import { GetGameByIDController } from './getGameByID.controller'
 import { GetGameByIDUseCase } from '../../../app/useCases/games/getGameByIDUseCase'
-import { UpdateRatingController } from './updateRating.controller'
-import { UpdateRatingUseCase } from '../../../app/useCases/games/updateRatingUseCase'
-import { AddToWishPlayController } from './addToWishPlay.controller'
-import { GetWishedGamesController } from './getWishedGames.controller'
-import { WishedGamesUseCase } from '../../../app/useCases/games/wishedGamesUseCase'
-import { AddToWishPlayUseCase } from '../../../app/useCases/games/addToWishPlayUseCase'
+import { UpdateRatingController } from './rating/updateRating.controller'
+import { UpdateRatingUseCase } from '../../../app/useCases/games/rating/updateRatingUseCase'
+import { AddToWishPlayController } from './wish/addToWishPlay.controller'
+import { GetWishedGamesController } from './wish/getWishedGames.controller'
+import { WishedGamesUseCase } from '../../../app/useCases/games/wish/wishedGamesUseCase'
+import { AddToWishPlayUseCase } from '../../../app/useCases/games/wish/addToWishPlayUseCase'
 import { ISWishPlayRepository } from '../../../domain/repositories/IWishPlay'
 import { PrismaWishPlayRepository } from '../../../app/repositories/prismaWishPlayRepository'
 import { BuildGameDataUseCase } from '../../../app/useCases/buildGameDataUseCase'
-import { DeleteWishPlayController } from './deleteWishPlay.controller'
-import { DeleteWishPlayUseCase } from '../../../app/useCases/games/deleteWishPlayUseCase'
+import { DeleteWishPlayController } from './wish/deleteWishPlay.controller'
+import { DeleteWishPlayUseCase } from '../../../app/useCases/games/wish/deleteWishPlayUseCase'
+import { SearchGameController } from './searchGame.controller'
+import { SearchGameUseCase } from '../../../app/useCases/games/searchGameUseCase'
 
 @Module({
   controllers: [
@@ -48,6 +50,7 @@ import { DeleteWishPlayUseCase } from '../../../app/useCases/games/deleteWishPla
     AddToWishPlayController,
     GetWishedGamesController,
     DeleteWishPlayController,
+    SearchGameController,
   ],
   providers: [
     {
@@ -77,6 +80,7 @@ import { DeleteWishPlayUseCase } from '../../../app/useCases/games/deleteWishPla
     AddToWishPlayUseCase,
     BuildGameDataUseCase,
     DeleteWishPlayUseCase,
+    SearchGameUseCase,
   ],
 })
 export class GamesModule implements NestModule {
@@ -107,7 +111,7 @@ export class GamesModule implements NestModule {
         method: RequestMethod.POST,
       },
       {
-        path: 'games/wishPlay',
+        path: 'games/wishPlay/:page',
         method: RequestMethod.GET,
       },
     )

@@ -1,5 +1,5 @@
 import { BadRequestException, Controller, Get, Param } from '@nestjs/common'
-import { GetCommentsByGameUseCase } from '../../../app/useCases/games/getCommentsByGameUseCase'
+import { GetCommentsByGameUseCase } from '../../../../app/useCases/games/commentary/getCommentsByGameUseCase'
 
 @Controller('games')
 export class GetCommentsByGameController {

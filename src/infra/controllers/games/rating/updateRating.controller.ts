@@ -1,5 +1,5 @@
 import { Body, Controller, Param, Patch } from '@nestjs/common'
-import { UpdateRatingUseCase } from '../../../app/useCases/games/updateRatingUseCase'
+import { UpdateRatingUseCase } from '../../../../app/useCases/games/rating/updateRatingUseCase'
 
 @Controller('games')
 export class UpdateRatingController {

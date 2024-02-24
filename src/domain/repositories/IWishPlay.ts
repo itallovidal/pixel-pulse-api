@@ -3,7 +3,7 @@ import { IWishPlay } from '../entities/IWishPlay'
 
 export interface IWishPlayRepository {
   addToWishPlay: (data: IAddToWishPlayDTO) => Promise<void>
-  getAllWishes: (userID: string) => Promise<IWishPlay[]>
+  getAllWishes: (userID: string, page: number) => Promise<IWishPlay[]>
   getWishByID: (id: string) => Promise<IWishPlay | null>
   getWishByUserIDAndGameID: (
     userID: string,

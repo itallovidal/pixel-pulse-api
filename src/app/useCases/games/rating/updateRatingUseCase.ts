@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import {
   IRatingRepository,
   ISRatingRepository,
-} from '../../../domain/repositories/IRatingRepository'
+} from '../../../../domain/repositories/IRatingRepository'
 
 @Injectable()
 export class UpdateRatingUseCase {

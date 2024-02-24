@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common'
 import {
   IRatingRepository,
   ISRatingRepository,
-} from '../../../domain/repositories/IRatingRepository'
-import { IRatingGameDTO } from '../../../domain/DTOs/game/rating-game-schema'
+} from '../../../../domain/repositories/IRatingRepository'
+import { IRatingGameDTO } from '../../../../domain/DTOs/game/rating-game-schema'
 
 @Injectable()
 export class RateGameUseCase {

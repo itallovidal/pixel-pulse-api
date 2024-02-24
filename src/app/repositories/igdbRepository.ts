@@ -8,6 +8,7 @@ import { isEmptyObject } from '../../utilities/isEmptyObject'
 @Injectable()
 export class IGDBRepository implements IGameDatabase {
   private IGDB!: AxiosInstance
+  private platformFilter = `platforms = (8,130,11,41,9,48,167,169,12)`
 
   constructor() {
     this.auth()
@@ -76,11 +77,10 @@ export class IGDBRepository implements IGameDatabase {
         ? ''
         : `& genres = (${favoritesGenres[0]}) | genres = (${favoritesGenres[1]}) `
 
-    const platformFilter = `platforms = (8,130,11,41,9,48,167,169,12)`
     const requiredFields = `genres.name != null & first_release_date != null & cover != null & summary != null & rating >= 70`
     const fields = `fields name, first_release_date, cover.url, genres.name, summary, id, platforms.name`
 
-    const query = `where ${requiredFields} & ${platformFilter} ${genresFilter} ; ${fields} ; limit 1; offset ${offset};`
+    const query = `where ${requiredFields} & ${this.platformFilter} ${genresFilter} ; ${fields} ; limit 1; offset ${offset};`
 
     let game = await this.getIGDBGame(query)
     while (isEmptyObject(game)) {
@@ -114,5 +114,18 @@ export class IGDBRepository implements IGameDatabase {
     }
 
     return response.data[0] as IGame
+  }
+
+  async searchGame(gameToSearch: string) {
+    const fields = `fields name, cover.url, id`
+    const requiredFields = `cover != null`
+    const query = `where version_parent = null & ${this.platformFilter} & ${requiredFields}; ${fields}; search "${gameToSearch}"; limit 500;`
+    const response = await this.IGDB.post('games', query)
+
+    if (response.status !== 200) {
+      throw new Error('Erro ao pegar o jogo pelo ID no IGDB.')
+    }
+
+    return response.data
   }
 }

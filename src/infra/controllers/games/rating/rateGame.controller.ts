@@ -6,13 +6,13 @@ import {
   Response,
   UnauthorizedException,
 } from '@nestjs/common'
-import { RateGameUseCase } from '../../../app/useCases/games/rateGameUseCase'
-import { ZodValidationPipe } from '../../pipes/zod-validation-pipe'
+import { RateGameUseCase } from '../../../../app/useCases/games/rating/rateGameUseCase'
+import { ZodValidationPipe } from '../../../pipes/zod-validation-pipe'
 import {
   IRatingGameDTO,
   ratingGameDTO,
-} from '../../../domain/DTOs/game/rating-game-schema'
-import { IUser } from '../../../domain/entities/IUser'
+} from '../../../../domain/DTOs/game/rating-game-schema'
+import { IUser } from '../../../../domain/entities/IUser'
 
 @Controller('games')
 export class RateGameController {
